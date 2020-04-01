@@ -1,5 +1,6 @@
 public class EntryPoint {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        String sPath = "jdbc:sqlite:C:/Users/naume/Documents/SQLite/Classes.db";
+        SQLiteDB sql = new SQLiteDB(sPath);
     }
 }
