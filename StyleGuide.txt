@@ -1,0 +1,13 @@
+Class Scheduling Guide
+
+- Indentation should be composed of 4 spaces, not tabs.
+- Variable and function names should follow the camelCase style.
+- Class names should follow the PascalCase style.
+- Braces should start on the next line and match up:
+    Ex:
+        Func()
+        {
+
+        }
+
+TODO: Add comment block examples
