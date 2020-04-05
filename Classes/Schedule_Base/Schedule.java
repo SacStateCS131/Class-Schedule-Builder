@@ -53,9 +53,13 @@ class Schedule
     {
         for(int i = 0; i < courses.size(); i++)
         {
-            if(courses.get(i).getTimeSlot().conflict(course.getTimeSlot()))
+            if(courses.get(i).checkConflict(course))
+            {
+                //conflict detected
                 return true;
+            }
         }
+        //no conflict detected
         return false;
     }
 }

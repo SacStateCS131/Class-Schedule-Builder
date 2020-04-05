@@ -1,10 +1,13 @@
-import java.util.regex.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 class TimeSlot
 {
     private byte dayCode;
-    private int startTime;
-    private int endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     /**
     * TimeSlot constructor.
@@ -13,8 +16,9 @@ class TimeSlot
     */
     TimeSlot(String dayAndTime)
     {
-        String dayAndTimeRegex = "(?<Mo>Mo)?(?<Tu>Tu)?(?<We>We)?(?<Th>Th)?(?<Fr>Fr)?(?<Sa>Sa)?(?<Su>Su)?\\s*(?<startHour>\\d+):(?<startMinute>\\d+)(?<startMeridiem>[A-Z]+)\\s+-\\s+(?<endHour>\\d+):(?<endMinute>\\d+)(?<endMeridiem>[A-Z]+)";
+        String dayAndTimeRegex = "(?<Mo>Mo)?(?<Tu>Tu)?(?<We>We)?(?<Th>Th)?(?<Fr>Fr)?(?<Sa>Sa)?(?<Su>Su)?\\s*(?<startTime>\\d+:\\d+[A-Z]+)\\s+-\\s+(?<endTime>\\d+:\\d+[A-Z]+)";
         Pattern dayAndTimePattern = Pattern.compile(dayAndTimeRegex);
+        
         Matcher dayAndTimeMatch = dayAndTimePattern.matcher(dayAndTime);
         dayAndTimeMatch.find();
         this.dayCode = 0;
@@ -32,14 +36,10 @@ class TimeSlot
             this.dayCode |= 0x20;
         if(dayAndTimeMatch.group("Su") != null)
             this.dayCode |= 0x40;
-        this.startTime = (Integer.parseInt(dayAndTimeMatch.group("startHour"))*60) + (Integer.parseInt(dayAndTimeMatch.group("startMinute")));
-        if(dayAndTimeMatch.group("startMeridiem").equals("PM") && 
-           dayAndTimeMatch.group("startHour") != "12")
-            this.startTime += 60*12;
-        this.endTime = (Integer.parseInt(dayAndTimeMatch.group("endHour"))*60) + (Integer.parseInt(dayAndTimeMatch.group("endMinute")));
-        if(dayAndTimeMatch.group("endMeridiem").equals("PM")&& 
-           dayAndTimeMatch.group("endHour") != "12")
-            this.endTime += 60*12;
+        startTime = LocalTime.parse(dayAndTimeMatch.group("startTime"),
+                    DateTimeFormatter.ofPattern("h:mma"));
+        endTime = LocalTime.parse(dayAndTimeMatch.group("endTime"),
+                  DateTimeFormatter.ofPattern("h:mma"));
     }
 
     /**
@@ -53,7 +53,7 @@ class TimeSlot
         this.endTime = dayAndTime.endTime;
     }
 
-    public byte getDayCode(){ return dayCode; }
+    public byte getDayCode(){ return this.dayCode; }
 
     public String[] getDays()
     {
@@ -66,65 +66,65 @@ class TimeSlot
         }
         String[] days = new String[dayCount];
         int i = 0;
-        if((dayCode & 0x01) != 0)
+        if((this.dayCode & 0x01) != 0)
         {
             days[i] = "Monday";
             i++;
         }
-        if((dayCode & 0x02) != 0)
+        if((this.dayCode & 0x02) != 0)
         {
             days[i] = "Tuesday";
             i++;
         }
-        if((dayCode & 0x04) != 0)
+        if((this.dayCode & 0x04) != 0)
         {
             days[i] = "Wednesday";
             i++;
         }
-        if((dayCode & 0x08) != 0)
+        if((this.dayCode & 0x08) != 0)
         {
             days[i] = "Thursday";
             i++;
         }
-        if((dayCode & 0x10) != 0)
+        if((this.dayCode & 0x10) != 0)
         {
             days[i] = "Friday";
             i++;
         }
-        if((dayCode & 0x20) != 0)
+        if((this.dayCode & 0x20) != 0)
         {
             days[i] = "Saturday";
             i++;
         }
-        if((dayCode & 0x40) != 0)
+        if((this.dayCode & 0x40) != 0)
         {
             days[i] = "Sunday";
         }
         return days;
     }
 
-    public int getStartHour(){ return startTime/60; }
+    public int getStartHour(){ return this.startTime.getHour(); }
 
-    public int getStartMin(){ return startTime%60; }
+    public int getStartMin(){ return this.startTime.getMinute(); }
 
-    public int getEndHour(){ return endTime/60; }
+    public int getEndHour(){ return this.endTime.getHour(); }
 
-    public int getEndMin(){ return endTime%60; }
+    public int getEndMin(){ return this.endTime.getMinute(); }
 
     /**
     * Checks two TimeSlots for a conflict.
     * @param dayAndTime TimeSlot object to be compared to this object.
     * @return boolean value true if conflict exsists, otherwise false.
     */
-    public boolean conflict(TimeSlot dayAndTime)
+    public boolean checkConflict(TimeSlot dayAndTime)
     {
         //bitwise & used to check dayCodes for matching bits
         if((this.dayCode & dayAndTime.dayCode) != 0)
         {
-            if((this.startTime >= dayAndTime.startTime && 
-                this.startTime <= dayAndTime.endTime) ||
-               (this.endTime >= dayAndTime.startTime &&
-                this.endTime <= dayAndTime.endTime))
+            if((this.startTime.compareTo(dayAndTime.startTime) > 0 && 
+                this.startTime.compareTo(dayAndTime.endTime) < 0) ||
+               (this.endTime.compareTo(dayAndTime.startTime) > 0 &&
+                this.endTime.compareTo(dayAndTime.endTime) < 0))
             {
                 //conflict found
                 return true;

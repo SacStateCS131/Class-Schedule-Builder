@@ -1,6 +1,6 @@
 class Course
 {
-    private TimeSlot dayAndTime;
+    private TimeSlot[] dayAndTime;
     private String name;
     private int id;
 
@@ -16,7 +16,12 @@ class Course
     {
         this.name = courseName;
         this.id = courseId;
-        this.dayAndTime = new TimeSlot(dayAndTime);
+        String[] dayAndTimeList = dayAndTime.split("\n");
+        this.dayAndTime = new TimeSlot[dayAndTimeList.length];
+        for(int i = 0; i < dayAndTimeList.length; i++)
+        {
+            this.dayAndTime[i] = new TimeSlot(dayAndTimeList[i]);
+        }
     }
 
     /**
@@ -27,10 +32,14 @@ class Course
     {
         this.name = course.name;
         this.id = course.id;
-        this.dayAndTime = new TimeSlot(course.dayAndTime);
+        this.dayAndTime = new TimeSlot[course.dayAndTime.length];
+        for(int i = 0; i < course.dayAndTime.length; i++)
+        {
+            this.dayAndTime[i] = new TimeSlot(course.dayAndTime[i]);
+        }
     }
 
-    public TimeSlot getTimeSlot(){ return this.dayAndTime; }
+    public TimeSlot[] getTimeSlots(){ return this.dayAndTime; }
 
     public String getName(){ return this.name; }
 
@@ -49,19 +58,44 @@ class Course
     {
         System.out.println("Name: " + this.name);
         System.out.println("ID: " + this.id);
-        String[] days = this.dayAndTime.getDays();
-        System.out.println("Days: " + days[0]);
-        for(int i = 1; i < days.length; i++)
+        for(TimeSlot dayAndTime : this.dayAndTime)
         {
-            System.out.println("      " + days[i]);
+            String[] days = dayAndTime.getDays();
+            System.out.println("Days: " + days[0]);
+            for(int i = 1; i < days.length; i++)
+            {
+                System.out.println("      " + days[i]);
+            }
+            System.out.println("Start Time: " + 
+                            dayAndTime.getStartHour() +
+                            ":" +
+                            dayAndTime.getStartMin());
+            System.out.println("End Time: " + 
+                            dayAndTime.getEndHour() +
+                            ":" +
+                            dayAndTime.getEndMin());
         }
-        System.out.println("Start Time: " + 
-                           this.dayAndTime.getStartHour() +
-                           ":" +
-                           this.dayAndTime.getStartMin());
-        System.out.println("End Time: " + 
-                           this.dayAndTime.getEndHour() +
-                           ":" +
-                           this.dayAndTime.getEndMin());
+    }
+
+    /**
+    * Checks two Courses for a TimeSlot conflict.
+    * @param course Course object to be compared to this object.
+    * @return boolean value true if conflict exsists, otherwise false.
+    */
+    public boolean checkConflict(Course course)
+    {
+        for(TimeSlot thisTimeSlot : this.dayAndTime)
+        {
+            for(TimeSlot courseTimeSlot : course.dayAndTime)
+            {
+                if(thisTimeSlot.checkConflict(courseTimeSlot))
+                {
+                    //conflict detected.
+                    return true;
+                }
+            }
+        }
+        //conflict not detected
+        return false;
     }
 }
