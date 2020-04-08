@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 
 public class SQLiteDB
 {
@@ -13,6 +14,10 @@ public class SQLiteDB
     private Statement mStmt;
     private ResultSet mRS;
 
+    /**
+     * SQLiteDB constructor.
+     * Expand later.
+     */
     public SQLiteDB() { }
 
     public SQLiteDB(String sURL)
@@ -28,6 +33,9 @@ public class SQLiteDB
         }
     }
 
+    /**
+     * Un-initialises the SQLite object. Releases all handles.
+     */
     public void Release()
     {
         mConn   = null;
@@ -37,31 +45,40 @@ public class SQLiteDB
         mRSMeta = null;
     }
 
-    public boolean Execute(String sSQL, StringBuffer sRows, StringBuffer sCols)
+    /**
+     * Executes the supplied SQL statement and fills the provided
+     * list of Course objects.
+     * @param sSQL Input Select SQL statement
+     *                   ex: "SELECT * FROM TABLE"
+     * @param courseList Arraylist of course objects. It is emptied
+     *                   at the beginning of execution.
+     * @return Returns true if all goes well. False if the
+     *         recordset is either incomplete or empty.
+     */
+    public boolean Execute(String sSQL, ArrayList<Course> courseList)
     {
-        int iColCnt;
+        //int iColCnt;
 
-        sRows.delete(0, sRows.length());
-        sCols.delete(0, sCols.length());
+        if(!courseList.isEmpty())
+        {
+            courseList.clear();
+        }
 
         try
         {
             mStmt = mConn.createStatement();
             mRS = mStmt.executeQuery(sSQL);
 
-            if(mRS.isClosed()) //CHECK THIS
+            if(mRS.isClosed())
                 return false;
 
             mRSMeta = mRS.getMetaData();
-            iColCnt = mRSMeta.getColumnCount();
+            //iColCnt = mRSMeta.getColumnCount();
 
             while(mRS.next())
             {
-                for(int i = 1; i < iColCnt; i++)
-                {
-                    Object value = mRS.getObject(i);
-                    System.out.println(value + "\n");
-                }
+                courseList.add(new Course(mRS.getString(1) + " " + mRS.getInt(2),
+                               mRS.getInt(4), mRS.getString(7)));
             }
         } catch (SQLException e)
         {
@@ -71,14 +88,18 @@ public class SQLiteDB
         return true;
     }
 
-/*    public boolean Execute(String sSQL*//*, Object here*//*)
-    {
-        return true;
-    }*/
-
+    /**
+     * Executes the supplied SQL statement. Intended for insert
+     * statements.
+     * TODO: Impliment logic if necessary.
+     * @param sSQL Input Insert SQL statement
+     *                   ex: "INSERT () INTO TABLE()"
+     * @return Returns true if the insert is successful. False
+     * if the insert statement fails.
+     */
     public boolean Execute(String sSQL)
     {
-
+        //reserved for if we ever need to do an insert
         return true;
     }
 }
