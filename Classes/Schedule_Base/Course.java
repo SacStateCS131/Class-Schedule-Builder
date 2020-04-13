@@ -26,8 +26,7 @@ class Course
     *                   ex: "Devin Cook"
     * @param dayAndTime String that contains day and time data
     *                   ex: "MoWe 8:00AM - 9:00AM"
-    * @param meetingDates String[] first spot contains start date
-    *                   Second spot contains end date
+    * @param meetingDates String contains the start and end dates
     *                   ex: {"5/26/2020", "7/02/2020"}
     */
     Course(String subject, int courseNumber, String description, int courseId, String courseSection, String dayAndTime, String rooms, String instructors, String meetingDates)
@@ -88,16 +87,19 @@ class Course
     public String getDates() { return this.meetingDates; }
 
     /**
-    * Prints out the Course information in the following format:
-    *   subject: CSC131
-    *   ID: 31407
-    *   description: Computer Software Engineering
-    *   Days: Monday
-    *         Wednesday
-    *   Start Time: 17:30
-    *   End Time: 18:45
-    *   Room: Eureka 121
-    *   Instructor: Jagannadha Chidella
+    * Name: CSC 10
+    * description: Introduction to Programming Logic
+    * ID: 50472
+    * Section: 02-DIS Six Wk 1
+    * Days: Monday
+    *       Wednesday
+    *       Friday
+    * Start Time: 10:30
+    * End Time: 11:55
+    * Rooms: Web Online
+    * Instructors: Devin Cook
+    * Meeting Dates:
+    * 05/26/2020 - 07/02/2020
     */
     public void printCourse()
     {
