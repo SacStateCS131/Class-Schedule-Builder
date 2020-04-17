@@ -77,8 +77,9 @@ public class SQLiteDB
 
             while(mRS.next())
             {
-                courseList.add(new Course(mRS.getString(1) + " " + mRS.getInt(2),
-                               mRS.getInt(4), mRS.getString(7)));
+                courseList.add(new Course(mRS.getString(1), mRS.getInt(2), mRS.getString(3), mRS.getInt(4),
+                               mRS.getString(6), mRS.getString(7), mRS.getString(8), mRS.getString(9),
+                               mRS.getString(10)));
             }
         } catch (SQLException e)
         {
