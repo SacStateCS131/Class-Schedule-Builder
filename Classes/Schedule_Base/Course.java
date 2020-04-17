@@ -22,7 +22,7 @@ class Course
     * @param courseSection String contains section of course
     *                   ex: "01-ACT six wk 1"
     * @param rooms String[] that contains the course room(s)
-    * @param instructor String[] contains professor name(s) for the course
+    * @param instructors String[] contains professor name(s) for the course
     *                   ex: "Devin Cook"
     * @param dayAndTime String that contains day and time data
     *                   ex: "MoWe 8:00AM - 9:00AM"
