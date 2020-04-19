@@ -16,7 +16,7 @@ class TimeSlot
     */
     TimeSlot(String dayAndTime)
     {
-        String dayAndTimeRegex = "(?<Mo>Mo)?(?<Tu>Tu)?(?<We>We)?(?<Th>Th)?(?<Fr>Fr)?(?<Sa>Sa)?(?<Su>Su)?\\s*(?<startTime>\\d+:\\d+[A-Z]+)\\s+-\\s+(?<endTime>\\d+:\\d+[A-Z]+)";
+        String dayAndTimeRegex = "(?<Mo>Mo)?(?<Tu>Tu)?(?<We>We)?(?<Th>Th)?(?<Fr>Fr)?(?<Sa>Sa)?(?<Su>Su)?(\\s*(?<startTime>\\d+:\\d+[A-Z]+)\\s+-\\s+(?<endTime>\\d+:\\d+[A-Z]+))?";
         Pattern dayAndTimePattern = Pattern.compile(dayAndTimeRegex);
         
         Matcher dayAndTimeMatch = dayAndTimePattern.matcher(dayAndTime);
@@ -36,10 +36,17 @@ class TimeSlot
             this.dayCode |= 0x20;
         if(dayAndTimeMatch.group("Su") != null)
             this.dayCode |= 0x40;
-        startTime = LocalTime.parse(dayAndTimeMatch.group("startTime"),
+        if(dayCode != 0) {
+            startTime = LocalTime.parse(dayAndTimeMatch.group("startTime"),
                     DateTimeFormatter.ofPattern("h:mma"));
-        endTime = LocalTime.parse(dayAndTimeMatch.group("endTime"),
-                  DateTimeFormatter.ofPattern("h:mma"));
+            endTime = LocalTime.parse(dayAndTimeMatch.group("endTime"),
+                    DateTimeFormatter.ofPattern("h:mma"));
+        }
+        else
+        {
+            startTime = null;
+            endTime = null;
+        }
     }
 
     /**

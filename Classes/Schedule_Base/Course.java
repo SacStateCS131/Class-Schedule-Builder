@@ -110,28 +110,33 @@ class Course
         for(TimeSlot dayAndTime : this.dayAndTime)
         {
             String[] days = dayAndTime.getDays();
-            System.out.println("Days: " + days[0]);
-            for(int i = 1; i < days.length; i++)
-            {
-                System.out.println("      " + days[i]);
+            if(days.length != 0) {
+                System.out.println("Days: " + days[0]);
+                for (int i = 1; i < days.length; i++) {
+                    System.out.println("      " + days[i]);
+                }
+                String[] extraZeroes = {"", ""};
+                if (dayAndTime.getStartMin() < 10) {
+                    extraZeroes[0] = "0";
+                }
+                if (dayAndTime.getEndMin() < 10) {
+                    extraZeroes[1] = "0";
+                }
+                System.out.println("Start Time: " +
+                        dayAndTime.getStartHour() +
+                        ":" + extraZeroes[0] +
+                        dayAndTime.getStartMin());
+                System.out.println("End Time: " +
+                        dayAndTime.getEndHour() +
+                        ":" + extraZeroes[1] +
+                        dayAndTime.getEndMin());
             }
-            String[] extraZeroes = {"", ""};
-            if(dayAndTime.getStartMin() < 10)
+            else
             {
-                extraZeroes[0] = "0";
+                System.out.println("Days: TBA");
+                System.out.println("Start Time: TBA");
+                System.out.println("End Time: TBA");
             }
-            if(dayAndTime.getEndMin() < 10)
-            {
-                extraZeroes[1] = "0";
-            }
-            System.out.println("Start Time: " + 
-                            dayAndTime.getStartHour() +
-                            ":" + extraZeroes[0] +
-                            dayAndTime.getStartMin());
-            System.out.println("End Time: " + 
-                            dayAndTime.getEndHour() +
-                            ":" + extraZeroes[1] +
-                            dayAndTime.getEndMin());
         }
         System.out.println("Rooms: " + this.rooms[0]);
         for(int i = 1; i < this.rooms.length; i++)
