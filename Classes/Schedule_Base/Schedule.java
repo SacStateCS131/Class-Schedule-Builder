@@ -14,7 +14,7 @@ class Schedule
 
     Schedule(Schedule s)
     {
-        this.courses = s.courses;
+        this.courses = new ArrayList<Course>(s.courses);
     }
 
     /**
