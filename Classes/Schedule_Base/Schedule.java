@@ -5,11 +5,16 @@ class Schedule
     private ArrayList<Course> courses;
     
     /**
-    * defualt Schedule constructor
+    * default Schedule constructor
     */
     Schedule()
     {
         this.courses = new ArrayList<Course>();
+    }
+
+    Schedule(Schedule s)
+    {
+        this.courses = s.courses;
     }
 
     /**
