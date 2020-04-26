@@ -128,10 +128,10 @@ class TimeSlot
         //bitwise & used to check dayCodes for matching bits
         if((this.dayCode & dayAndTime.dayCode) != 0)
         {
-            if((this.startTime.compareTo(dayAndTime.startTime) > 0 && 
-                this.startTime.compareTo(dayAndTime.endTime) < 0) ||
-               (this.endTime.compareTo(dayAndTime.startTime) > 0 &&
-                this.endTime.compareTo(dayAndTime.endTime) < 0))
+            if((this.startTime.compareTo(dayAndTime.startTime) >= 0 && 
+                this.startTime.compareTo(dayAndTime.endTime) <= 0) ||
+               (this.endTime.compareTo(dayAndTime.startTime) >= 0 &&
+                this.endTime.compareTo(dayAndTime.endTime) <= 0))
             {
                 //conflict found
                 return true;
