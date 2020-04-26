@@ -5,11 +5,12 @@ public class EntryPoint
 {
     public static void main(String[] args)
     {
-        ArrayList<Course> courseList = new ArrayList<>();
+        ArrayList<Course> courseList = new ArrayList<Course>();
+        Planner planner = new Planner();
 
-        String sPath = "jdbc:sqlite:C:/Users/naume/Documents/SQLite/Classes.db";
+        String sPath = "jdbc:sqlite:C:\\Users\\Alexander\\IdeaProjects\\SQLite\\Classes.db";
         SQLiteDB sql = new SQLiteDB(sPath);
-        
+
         Scanner input = new Scanner(System.in);
         int selection;
 
@@ -30,7 +31,7 @@ public class EntryPoint
                 if(sql.Execute(query, courseList))
                 {
                     System.out.println(subject + " " + number + " added to schedule");
-                    //Planner.addCourses(courseList)
+                    planner.addCourses(courseList);
                 }
                 else
                 {
@@ -38,6 +39,6 @@ public class EntryPoint
                 }
             }
         }while(selection != 2);
-        //Planner.print()
+        planner.printSchedule();
     }
 }
