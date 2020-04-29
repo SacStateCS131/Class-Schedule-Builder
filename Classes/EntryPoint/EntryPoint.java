@@ -6,10 +6,11 @@ public class EntryPoint
     {
         ArrayList<Course> courseList = new ArrayList<>();
 
-        String sPath = "jdbc:sqlite:C:/Users/naume/Documents/SQLite/Classes.db";
-        SQLiteDB sql = new SQLiteDB(sPath);
-        sql.Execute("Select * from CourseList;", courseList);
+        String sPath = "C:/Users/naume/Documents/SQLite/Classes.db";
+        SQLiteDB sql = SQLiteDB.getInstance();
+        sql.Init(sPath);
 
-        System.out.println("Import Successful.");
+        if(sql.Execute("Select * from CourseList;", courseList))
+            System.out.println("Import Successful.");
     }
 }
