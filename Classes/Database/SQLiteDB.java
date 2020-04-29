@@ -1,3 +1,5 @@
+import java.io.File;
+import java.nio.file.InvalidPathException;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,21 +10,52 @@ import java.util.ArrayList;
 
 public class SQLiteDB
 {
-    private ResultSetMetaData mRSMeta;
+    private ResultSetMetaData mRSMeta = null;
     private String msURL;
     private Connection mConn = null;
     private Statement mStmt;
     private ResultSet mRS;
+    private boolean bInit = false;
+
+    private static SQLiteDB mHandle = null;
 
     /**
      * SQLiteDB constructor.
-     * Expand later.
+     * Not used because class is a singleton.
      */
-    public SQLiteDB() { }
+    private SQLiteDB() { }
 
-    public SQLiteDB(String sURL)
+    /**
+     * Singleton function to follow Java standard.
+     * @return Will return a SQLite object. Will allocate
+     *         the object if one does not exist.
+     */
+    public static SQLiteDB getInstance()
     {
-        msURL = sURL;
+        if(mHandle == null)
+            mHandle = new SQLiteDB();
+        return mHandle;
+    }
+
+    /**
+     * Will attempt to open a connection to a SQLite database
+     * using the path provided.
+     * @param sURL File path
+     *                   ex: "C:\\Database.db"
+     * @return Returns true if all goes well. False if the
+     *         database cannot be found.
+     */
+    public boolean Init(String sURL)
+    {
+
+        if(!new File(sURL).isFile())
+        {
+            System.out.println("File does not exist in the provided path: \n" + sURL);
+            return false;
+        }
+
+        msURL = "jdbc:sqlite:" + sURL;
+
         try
         {
             mConn = DriverManager.getConnection(msURL);
@@ -30,7 +63,13 @@ public class SQLiteDB
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            msURL = "";
+            return false;
         }
+
+        msURL = sURL;
+        bInit = true;
+        return true;
     }
 
     /**
@@ -43,6 +82,7 @@ public class SQLiteDB
         msURL   = null;
         mRS     = null;
         mRSMeta = null;
+        bInit   = false;
     }
 
     /**
@@ -57,7 +97,11 @@ public class SQLiteDB
      */
     public boolean Execute(String sSQL, ArrayList<Course> courseList)
     {
-        //int iColCnt;
+        if(!bInit)
+        {
+            System.out.println("Object not initialized. Cannot execute SQL statement.\n");
+            return false;
+        }
 
         if(!courseList.isEmpty())
         {
@@ -73,34 +117,25 @@ public class SQLiteDB
                 return false;
 
             mRSMeta = mRS.getMetaData();
-            //iColCnt = mRSMeta.getColumnCount();
 
             while(mRS.next())
             {
                 courseList.add(new Course(mRS.getString(1), mRS.getInt(2), mRS.getString(3), mRS.getInt(4),
-                               mRS.getString(6), mRS.getString(7), mRS.getString(8), mRS.getString(9),
-                               mRS.getString(10)));
+                        mRS.getString(6), mRS.getString(7), mRS.getString(8), mRS.getString(9),
+                        mRS.getString(10)));
             }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            return false;
         }
 
         return true;
     }
 
-    /**
-     * Executes the supplied SQL statement. Intended for insert
-     * statements.
-     * TODO: Impliment logic if necessary.
-     * @param sSQL Input Insert SQL statement
-     *                   ex: "INSERT () INTO TABLE()"
-     * @return Returns true if the insert is successful. False
-     * if the insert statement fails.
-     */
-    public boolean Execute(String sSQL)
-    {
-        //reserved for if we ever need to do an insert
-        return true;
-    }
+//    public boolean Execute(String sSQL)
+//    {
+//        //reserved for if we ever need to do an insert
+//        return true;
+//    }
 }
