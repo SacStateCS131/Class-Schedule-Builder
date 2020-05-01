@@ -121,17 +121,25 @@ class TimeSlot
     /**
     * Checks two TimeSlots for a conflict.
     * @param dayAndTime TimeSlot object to be compared to this object.
-    * @return boolean value true if conflict exsists, otherwise false.
+    * @return boolean value true if conflict exists, otherwise false.
     */
     public boolean checkConflict(TimeSlot dayAndTime)
     {
         //bitwise & used to check dayCodes for matching bits
         if((this.dayCode & dayAndTime.dayCode) != 0)
         {
-            if((this.startTime.compareTo(dayAndTime.startTime) >= 0 && 
+            if((this.startTime.compareTo(dayAndTime.startTime) >= 0 &&
                 this.startTime.compareTo(dayAndTime.endTime) <= 0) ||
                (this.endTime.compareTo(dayAndTime.startTime) >= 0 &&
                 this.endTime.compareTo(dayAndTime.endTime) <= 0))
+            {
+                //conflict found
+                return true;
+            }
+            else if((dayAndTime.startTime.compareTo(this.startTime) >= 0 &&
+                     dayAndTime.startTime.compareTo(this.endTime) <= 0) ||
+                    (dayAndTime.endTime.compareTo(this.startTime) >= 0 &&
+                     dayAndTime.endTime.compareTo(this.endTime) <= 0))
             {
                 //conflict found
                 return true;
