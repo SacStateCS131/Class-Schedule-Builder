@@ -1,15 +1,54 @@
 import java.util.ArrayList;
 
-class Schedule
+class Schedule implements Iterator<Course>
 {
     private ArrayList<Course> courses;
+    int position;
     
     /**
-    * defualt Schedule constructor
+    * default Schedule constructor
     */
     Schedule()
     {
         this.courses = new ArrayList<Course>();
+    }
+
+    /**
+     * Iterator reset override
+     */
+    @Override
+    public void reset()
+    {
+        position = 0;
+    }
+
+    /**
+     * Iterator next override
+     */
+    @Override
+    public Course next()
+    {
+        return this.courses.get(position++);
+    }
+
+    /**
+     * Iterator currentItem override
+     */
+    @Override
+    public Course currentItem()
+    {
+        return this.courses.get(position);
+    }
+
+    /**
+     * Iterator hasNext override
+     */
+    @Override
+    public boolean hasNext()
+    {
+        if(position >= this.courses.size())
+            return false;
+        return true;
     }
 
     /**
