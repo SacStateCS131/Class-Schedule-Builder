@@ -23,6 +23,7 @@ public class Planner
             s.display();
             System.out.println("========================================");
         }
+
     }
 
     public void addCourses(ArrayList<Course> courses )
