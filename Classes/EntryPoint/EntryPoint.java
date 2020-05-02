@@ -8,8 +8,9 @@ public class EntryPoint
         ArrayList<Course> courseList = new ArrayList<Course>();
         Planner planner = new Planner();
 
-        String sPath = "jdbc:sqlite:C:\\Users\\Alexander\\IdeaProjects\\SQLite\\Classes.db";
-        SQLiteDB sql = new SQLiteDB(sPath);
+        String sPath = "C:/Users/naume/Documents/SQLite/Classes.db";
+        SQLiteDB sql = SQLiteDB.getInstance();
+        sql.Init(sPath);
 
         Scanner input = new Scanner(System.in);
         int selection;
