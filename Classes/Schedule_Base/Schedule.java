@@ -13,6 +13,13 @@ class Schedule implements Iterator<Course>
         this.courses = new ArrayList<Course>();
     }
 
+    Schedule(Schedule s)
+    {
+        this.courses  = s.courses;
+        this.courses  = new ArrayList<Course>(s.courses);
+        this.position = s.position;
+    }
+
     /**
      * Iterator reset override
      */
