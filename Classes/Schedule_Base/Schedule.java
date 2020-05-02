@@ -35,7 +35,10 @@ class Schedule implements Iterator<Course>
     @Override
     public Course next()
     {
-        return this.courses.get(position++);
+        if(this.hasNext())
+            return this.courses.get(position++);
+        else
+            return null;
     }
 
     /**
@@ -83,9 +86,11 @@ class Schedule implements Iterator<Course>
     */
     public void display()
     {
-        for(int i = 0; i < courses.size(); i++)
+        this.reset();
+
+        while(this.hasNext())
         {
-            courses.get(i).printCourse();
+            this.next().printCourse();
             System.out.println();
         }
     }
@@ -97,14 +102,14 @@ class Schedule implements Iterator<Course>
     */
     private boolean checkConflict(Course course)
     {
-        for(int i = 0; i < courses.size(); i++)
+        this.reset();
+
+        while(this.hasNext())
         {
-            if(courses.get(i).checkConflict(course))
-            {
-                //conflict detected
+            if(this.next().checkConflict(course))
                 return true;
-            }
         }
+
         //no conflict detected
         return false;
     }
