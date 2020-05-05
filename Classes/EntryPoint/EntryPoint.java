@@ -8,7 +8,7 @@ public class EntryPoint
         ArrayList<Course> courseList = new ArrayList<Course>();
         Planner planner = new Planner();
 
-        String sPath = "C:\\Users\\Kirby\\Desktop\\Class-Schedule-Builder-master\\Class-Schedule-Builder-master\\SQLite\\Classes.db";
+        String sPath = "C:\\Users\\naume\\Documents\\SQLite\\Classes.db";
         SQLiteDB sql = SQLiteDB.getInstance();
         sql.Init(sPath);
 
