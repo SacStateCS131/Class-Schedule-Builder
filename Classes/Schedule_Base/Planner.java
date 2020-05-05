@@ -37,11 +37,6 @@ public class Planner
                 if(temp.addCourse(c))
                 {
                     newList.add(temp);
-                    System.out.print("added");
-                }
-                else
-                {
-                    System.out.print("failed");
                 }
             }
         }
