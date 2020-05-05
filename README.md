@@ -18,8 +18,13 @@ The SQLite library can be found in Source/SQLite/.
 Group Members:
 
 Akul Arora
+
 Alex Svistun
+
 Ammar Aldujaili
+
 Cody Thompson
+
 Dmitriy Naumenko
+
 Kevin Kirby
